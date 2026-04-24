@@ -1,35 +1,350 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>面談対策エージェント</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    body {
+    *, *::before, *::after {
       margin: 0;
       padding: 0;
-      background: #f5f5f5;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      box-sizing: border-box;
     }
-    .container {
-      width: 600px;
-      height: 90vh;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-      border-radius: 12px;
+
+    :root {
+      --bg-dark: #1A0E20;
+      --purple: #8B5CF6;
+      --purple-dark: #6D3FD0;
+      --purple-muted: rgba(139, 92, 246, 0.55);
+      --text-light: #F0ECF5;
+      --text-muted: #7A6B8A;
+      --border-purple: rgba(139, 92, 246, 0.12);
+      --card-bg: rgba(139, 92, 246, 0.04);
+      --card-border: rgba(139, 92, 246, 0.08);
+      --card-hover-bg: rgba(139, 92, 246, 0.08);
+      --card-hover-border: rgba(139, 92, 246, 0.18);
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-light);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Header ── */
+    .header {
+      position: relative;
+      padding: 22px 28px 18px;
+      border-bottom: 1px solid var(--border-purple);
       overflow: hidden;
     }
-    iframe {
+
+    .header::after {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: 60px;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .header-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 960px;
+      margin: 0 auto;
       width: 100%;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--purple) 0%, var(--purple-dark) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .logo::after {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: 11px;
+      border: 1px solid rgba(139, 92, 246, 0.3);
+    }
+
+    .logo svg {
+      width: 20px;
+      height: 20px;
+      fill: #fff;
+    }
+
+    .header-text h1 {
+      font-size: 17px;
+      font-weight: 500;
+      color: var(--text-light);
+      letter-spacing: 0.04em;
+    }
+
+    .header-text p {
+      font-size: 10.5px;
+      color: var(--purple-muted);
+      margin-top: 2px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 400;
+    }
+
+    .badge {
+      font-size: 10px;
+      color: rgba(139, 92, 246, 0.8);
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      padding: 3px 10px;
+      border-radius: 4px;
+      letter-spacing: 0.06em;
+      font-weight: 400;
+    }
+
+    /* ── Main ── */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      max-width: 960px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 20px 16px;
+    }
+
+    /* ── Guide Cards ── */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      padding: 16px 0 14px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 16px 14px;
+      transition: all 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
       height: 100%;
+      background: var(--purple);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .card:hover {
+      background: var(--card-hover-bg);
+      border-color: var(--card-hover-border);
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .card-num {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--purple);
+      opacity: 0.6;
+    }
+
+    .card-line {
+      flex: 1;
+      height: 1px;
+      background: rgba(139, 92, 246, 0.1);
+    }
+
+    .card h3 {
+      font-size: 13px;
+      font-weight: 500;
+      color: #E0D6EC;
+      margin-bottom: 5px;
+    }
+
+    .card p {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      font-weight: 300;
+    }
+
+    /* ── Chat Wrapper ── */
+    .chat-wrapper {
+      flex: 1;
+      background: #FAFAFE;
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 540px;
+      border: 1px solid var(--card-border);
+    }
+
+    .chat-wrapper iframe {
+      flex: 1;
+      width: 100%;
       border: none;
+      min-height: 540px;
+    }
+
+    /* ── Footer ── */
+    .footer {
+      text-align: center;
+      padding: 14px 0 6px;
+      font-size: 10px;
+      color: #5A4A6E;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .header {
+        padding: 18px 16px 14px;
+      }
+
+      .header-text h1 {
+        font-size: 15px;
+      }
+
+      .badge {
+        display: none;
+      }
+
+      .main {
+        padding: 0 12px 12px;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        padding: 12px 0 10px;
+      }
+
+      .card {
+        padding: 14px 12px;
+      }
+
+      .chat-wrapper {
+        min-height: 460px;
+        border-radius: 10px;
+      }
+
+      .chat-wrapper iframe {
+        min-height: 460px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <iframe src="https://copilotstudio.microsoft.com/environments/Default-a24eb182-f4dc-4141-9251-06ef2ac8d70f/bots/cr268_interview_prep_agent/webchat?__version__=2"></iframe>
-  </div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-left">
+        <div class="logo">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17L4 17.17V4h16v12zM7 9h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2z"/>
+          </svg>
+        </div>
+        <div class="header-text">
+          <h1>面談対策エージェント</h1>
+          <p>interview preparation assistant</p>
+        </div>
+      </div>
+      <span class="badge">INTERNAL</span>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="main">
+    <!-- Guide Cards -->
+    <div class="cards">
+      <div class="card">
+        <div class="card-top">
+          <span class="card-num">01</span>
+          <div class="card-line"></div>
+        </div>
+        <h3>対策シート作成</h3>
+        <p>経歴カンペ・想定Q&A・逆質問を自動生成</p>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <span class="card-num">02</span>
+          <div class="card-line"></div>
+        </div>
+        <h3>過去メモ確認</h3>
+        <p>作成済みシートをSharePointから即取得</p>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <span class="card-num">03</span>
+          <div class="card-line"></div>
+        </div>
+        <h3>面談ログ記録</h3>
+        <p>振り返りを記録して次回メモに自動反映</p>
+      </div>
+    </div>
+
+    <!-- Chat -->
+    <div class="chat-wrapper">
+      <iframe
+        src="https://copilotstudio.microsoft.com/environments/Default-a24eb182-f4dc-4141-9251-06ef2ac8d70f/bots/cr268_interview_prep_agent/webchat?__version__=2"
+        frameborder="0"
+        allow="microphone *"
+      ></iframe>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    不具合や要望があれば管理者までご連絡ください
+  </footer>
+
 </body>
 </html>
